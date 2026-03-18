@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>B&P Beauty Shop</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cormorant+Garamond:wght@300;400;600&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="toast.css" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+  <div class="nav-brand">B&P</div>
+  <div class="nav-right">
+    <a href="cart.html" class="nav-link">
+      <div class="cart-wrap">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        <span class="cart-badge">0</span>
+      </div>
+    </a>
+  </div>
+</nav>
+
+  <!-- LOGO -->
+  <div class="logo-section">
+    <div class="logo-mark">
+      <img src="../utils/logo.png" alt="B& Beauty Shop Logo" class="logo-image" />
+    </div>
+  </div>
+
+  <!-- HEADING -->
+  <h2 class="section-title">Browse categories</h2>
+
+  <div class="divider"></div>
+
+  <!-- SEARCH BAR -->
+<div class="search-wrap">
+  <div class="search-box">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <circle cx="11" cy="11" r="8"/>
+      <path d="M21 21l-4.35-4.35"/>
+    </svg>
+    <input type="text" id="search-input" class="search-input" placeholder="search products..." />
+    <button class="search-clear" id="search-clear" style="display:none;">×</button>
+  </div>
+
+  <!-- Search Results Dropdown -->
+  <div class="search-results" id="search-results" style="display:none;">
+    <!-- results load here -->
+  </div>
+</div>
+
+  <!-- CATEGORIES -->
+  <div class="categories">
+
+    <!-- PERFUMES -->
+    <a href="perfumes.html" class="cat-card">
+      <div class="img-placeholder">
+        <img src="../utils/perfumes.jpeg" alt="Perfumes" class="cat-image" />
+      </div>
+      <div class="cat-label">
+        <div class="cat-btn">Perfumes</div>
+      </div>
+    </a>
+
+    <!-- BODY SPLASH -->
+    <a href="bodysplash.html" class="cat-card banner-card">
+      <div class="img-placeholder">
+        <img src="../utils/BodySplashes.jpeg" alt="Body Splash Collection" class="cat-image" />
+      </div>
+      <div class="cat-label">
+        <div class="cat-btn">Body Splash</div>
+      </div>
+    </a>
+
+    <!-- NATURAL OILS -->
+    <a href="naturaloils.html" class="cat-card">
+      <div class="img-placeholder">
+        <img src="../utils/zeit.jpeg" alt="Natural Oils" class="cat-image" />
+      </div>
+      <div class="cat-label">
+        <div class="cat-btn">Natural Oils</div>
+      </div>
+    </a>
+
+  </div>
+
+    <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">B&P</div>
+    <div>BEAUTY SHOP · EST. 2024</div>
+    <a href="https://www.instagram.com/b_and_p_beauty_shop" target="_blank" class="footer-instagram">
+    <svg class="instagram-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+      <circle cx="12" cy="12" r="4"/>
+      <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/>
+    </svg>
+    <span>@b_and_p_beauty_shop</span>
+  </a>
+    <div class="footer-copy">© 2024 All rights reserved</div>
+  </footer>
+  <script src="index.js"></script>
+  <script src="toast.js"></script>
+</body>
+</html>

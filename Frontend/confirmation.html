@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Confirmation - B&P Beauty Shop</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cormorant+Garamond:wght@300;400;600&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="confirmation.css" />
+  <link rel="stylesheet" href="toast.css" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div></div>
+    <div class="nav-right">
+      <a href="cart.html" class="nav-link">
+        <div class="cart-wrap">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+          <span class="cart-badge">0</span>
+        </div>
+      </a>
+    </div>
+  </nav>
+
+  <!-- LOGO -->
+  <div class="logo-section">
+    <div class="logo-mark">
+      <img src="../utils/logo.png" alt="B& Beauty Shop Logo" class="logo-image" />
+    </div>
+  </div>
+
+  <!-- CONFIRMATION CONTAINER -->
+  <div class="confirmation-container">
+
+    <!-- SUCCESS ICON -->
+    <div class="success-icon">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="48" fill="#90EE90" stroke="#4CAF50" stroke-width="2"/>
+        <path d="M30 50L45 65L75 35" stroke="#111" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <!-- SUCCESS MESSAGE -->
+    <h1 class="success-title">Payment Successful</h1>
+    <p class="success-subtitle">Thank You for your purchase</p>
+
+    <!-- ORDER DETAILS -->
+    <div class="order-details">
+      <h2 class="details-heading">Order Details</h2>
+
+      <div class="detail-row">
+        <span class="detail-label">Order ID</span>
+        <span class="detail-value" id="conf-order-id">-</span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Phone</span>
+        <span class="detail-value" id="conf-phone">-</span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Address</span>
+        <span class="detail-value" id="conf-address">-</span>
+      </div>
+
+      <div class="detail-divider"></div>
+
+      <div class="detail-row total">
+        <span class="detail-label">Total</span>
+        <span class="detail-value" id="conf-total">-</span>
+      </div>
+    </div>
+
+    <!-- CONTINUE SHOPPING BUTTON -->
+    <a href="index.html" class="continue-btn">continue shopping</a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">B&P</div>
+    <div>BEAUTY SHOP · EST. 2024</div>
+    <a href="https://www.instagram.com/b_and_p_beauty_shop" target="_blank" class="footer-instagram">
+    <svg class="instagram-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+      <circle cx="12" cy="12" r="4"/>
+      <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/>
+    </svg>
+    <span>@b_and_p_beauty_shop</span>
+  </a>
+    <div class="footer-copy">© 2024 All rights reserved</div>
+  </footer>
+
+  <script src="confirmation.js"></script>
+  <script src="toast.js"></script>
+</body>
+</html>

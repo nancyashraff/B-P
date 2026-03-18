@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard - B&P Beauty Shop</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+
+  <!-- LOGIN SCREEN -->
+  <div id="login-screen">
+    <div class="login-box">
+      <h1 class="login-title">Admin Access</h1>
+      <p class="login-sub">B&P Beauty Shop</p>
+      <input type="password" id="admin-password" class="login-input" placeholder="Enter admin password" />
+      <button class="login-btn" onclick="adminLogin()">Enter Dashboard</button>
+      <p id="login-error" class="login-error"></p>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard" style="display:none;">
+
+    <!-- NAV -->
+    <nav class="admin-nav">
+      <div class="admin-nav-brand">B&P Admin</div>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </nav>
+
+    <!-- OVERVIEW CARDS -->
+    <div class="dashboard-container">
+      <h2 class="dash-heading">Overview</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">🛍️</div>
+          <div class="stat-value" id="total-orders">-</div>
+          <div class="stat-label">Total Orders</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-value" id="total-revenue">-</div>
+          <div class="stat-label">Total Revenue</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📊</div>
+          <div class="stat-value" id="avg-order">-</div>
+          <div class="stat-label">Avg Order Value</div>
+        </div>
+      </div>
+
+
+      <!-- TOP PRODUCTS -->
+      <h2 class="dash-heading">Top Products</h2>
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Product</th>
+              <th>Category</th>
+              <th>Units Sold</th>
+              <th>Revenue</th>
+            </tr>
+          </thead>
+          <tbody id="top-products"></tbody>
+        </table>
+      </div>
+
+      <!-- ALL ORDERS -->
+      <h2 class="dash-heading">All Orders</h2>
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Phone</th>
+              <th>Address</th>
+              <th>Total</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="orders-list"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>
