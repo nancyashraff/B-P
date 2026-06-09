@@ -20,7 +20,7 @@ function loadCart() {
   container.innerHTML = cart.map((item, index) => `
     <div class="cart-item" data-index="${index}">
       <div class="item-image">
-        <img src="../utils/${item.image}" alt="${item.name}" />
+        <img src="http://localhost:3000/uploads/${item.image}" alt="${item.name}" onerror="this.onerror=null; this.src='utils/${item.image}';" />
       </div>
       <div class="item-details">
         <h3 class="item-name">${item.name}</h3>

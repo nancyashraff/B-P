@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="search-no-results">
             no results found for "<strong>${query}</strong>"<br>
             <span style="font-size:11px; margin-top:4px; display:block;">
-              try: perfumes · body splash · natural oils · sauvage · 50ml · women
+              try: perfumes · body splash · natural oils · sauvage · 60ml · women
             </span>
           </div>`;
         searchResults.style.display = 'block';
@@ -65,9 +65,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       searchResults.innerHTML = products.map(p => `
-        <a href="${getCategoryPage(p.category)}" class="search-result-item">
-          <img src="../utils/${p.image}" alt="${p.name}" class="search-result-img"
-            onerror="this.style.background='#f5f3f2'; this.src=''" />
+        <a href="product.html?id=${p._id}" class="search-result-item">
+          <img src="http://localhost:3000/uploads/${p.image}" alt="${p.name}" class="search-result-img"
+            onerror="this.onerror=null; this.src='utils/${p.image}';" />
           <div class="search-result-info">
             <div class="search-result-name">${highlightMatch(p.name, query)}</div>
             <div class="search-result-category">${formatCategory(p.category)}

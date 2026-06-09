@@ -1,7 +1,6 @@
 const OTP   = require('../models/OTP');
 const Order = require('../models/Order');
 const { sendOTP, sendOrderNotification } = require('../utils/mailer');
-//const { createDelivery } = require('../utils/bosta');
 
 const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 
@@ -50,17 +49,7 @@ const verifyOTPAndOrder = async (req, res) => {
       items: mappedItems,
       total,
     });
-  //   try {
-  //   const bostaOrder = await createDelivery({ ...order.toObject(), phone, address });
-  //   // Save Bosta tracking number to order
-  //   await Order.findByIdAndUpdate(order._id, { 
-  //     trackingNumber: bostaOrder.trackingNumber 
-  //   });
-  //   } catch (err) {
-  //     console.error('Bosta error:', err.message);
-  //     // Don't block the order if Bosta fails
-  // }
-  // Send order details to your email
+
     await sendOrderNotification({ ...order.toObject(), email, phone, address });
     res.status(201).json(order);
   } catch (err) {

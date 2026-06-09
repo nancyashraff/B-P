@@ -26,11 +26,15 @@
     <!-- NAV -->
     <nav class="admin-nav">
       <div class="admin-nav-brand">B&P Admin</div>
-      <button class="logout-btn" onclick="logout()">Logout</button>
+      <div class="admin-nav-actions">
+        <button class="icon-btn" onclick="promptChangePassword()" title="Change password">🔒</button>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
     </nav>
 
-    <!-- OVERVIEW CARDS -->
     <div class="dashboard-container">
+
+      <!-- OVERVIEW -->
       <h2 class="dash-heading">Overview</h2>
       <div class="stats-grid">
         <div class="stat-card">
@@ -50,6 +54,9 @@
         </div>
       </div>
 
+      <!-- SALES BY CATEGORY -->
+      <h2 class="dash-heading">Sales by Category</h2>
+      <div class="category-grid" id="category-stats"></div>
 
       <!-- TOP PRODUCTS -->
       <h2 class="dash-heading">Top Products</h2>
@@ -80,13 +87,123 @@
               <th>Address</th>
               <th>Total</th>
               <th>Date</th>
+              <th>Details</th>
             </tr>
           </thead>
           <tbody id="orders-list"></tbody>
         </table>
       </div>
+
+      <!-- PRODUCT MANAGEMENT -->
+      <h2 class="dash-heading">Product Management</h2>
+
+      <!-- ADD/EDIT FORM -->
+      <div class="product-form-wrap">
+        <h3 class="form-title">Add / Edit Product</h3>
+        <input type="hidden" id="edit-product-id" />
+
+        <div class="product-form-grid">
+          <div class="form-field">
+            <label>Name</label>
+            <input type="text" id="p-name" class="p-input" placeholder="60ml perfume" />
+          </div>
+          <div class="form-field">
+            <label>Price (L.E)</label>
+            <input type="number" id="p-price" class="p-input" placeholder="200" />
+          </div>
+          <div class="form-field">
+            <label>Discount (%)</label>
+            <input type="number" id="p-discount" class="p-input" placeholder="0" min="0" max="100" />
+          </div>
+          <div class="form-field">
+            <label>Category</label>
+            <select id="p-category" class="p-input">
+              <option value="perfumes">Perfumes</option>
+              <option value="bodysplash">Body Splash</option>
+              <option value="naturaloils">Natural Oils</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Product Image</label>
+            <div class="image-upload-wrap">
+              <input type="file" id="p-image-file" accept="image/*" onchange="previewImage(this)" />
+              <div class="image-preview" id="image-preview">
+                <span>Click to upload image</span>
+              </div>
+            </div>
+            <input type="hidden" id="p-image" />
+          </div>
+          <div class="form-field">
+            <label>Size</label>
+            <input type="text" id="p-size" class="p-input" placeholder="60ml" />
+          </div>
+          <div class="form-field">
+            <label>Gender</label>
+            <select id="p-gender" class="p-input">
+              <option value="">— none —</option>
+              <option value="men">Men</option>
+              <option value="women">Women</option>
+              <option value="unisex">Unisex</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Volume (oils)</label>
+            <input type="text" id="p-volume" class="p-input" placeholder="30ml" />
+          </div>
+          <div class="form-field full-width">
+            <label>Description</label>
+            <input type="text" id="p-description" class="p-input" placeholder="cinnamon & jasmin" />
+          </div>
+          <div class="form-field full-width">
+            <label>Scents (comma separated)</label>
+            <input type="text" id="p-scents" class="p-input" placeholder="Sauvage, Oud, Vanilla" />
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="save-btn" onclick="saveProduct()">Save Product</button>
+          <button class="cancel-btn" onclick="clearForm()" style="display:none;" id="cancel-edit-btn">Cancel Edit</button>
+        </div>
+      </div>
+
+      <!-- PRODUCTS TABLE -->
+      <div class="table-wrap" style="margin-top: 24px;">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Discount</th>
+              <th>Final Price</th>
+              <th>Stock</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="products-list"></tbody>
+        </table>
+      </div>
+
+    </div><!-- end dashboard-container -->
+  </div><!-- end dashboard -->
+
+  <div id="admin-modal" class="admin-modal hidden">
+    <div class="admin-modal-backdrop" onclick="closeAdminModal()"></div>
+    <div class="admin-modal-panel">
+      <div class="modal-header">
+        <h3 id="admin-modal-title"></h3>
+        <button class="modal-close" onclick="closeAdminModal()">✕</button>
+      </div>
+      <div id="admin-modal-body" class="admin-modal-body"></div>
+      <div class="modal-actions">
+        <button class="modal-cancel" onclick="closeAdminModal()">Cancel</button>
+        <button class="modal-confirm" id="admin-modal-confirm">Confirm</button>
+      </div>
     </div>
   </div>
+
+  <div id="admin-toast" class="admin-toast hidden"></div>
 
   <script src="admin.js"></script>
 </body>

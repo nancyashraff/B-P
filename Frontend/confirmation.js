@@ -14,11 +14,15 @@ const formatted = deliveryDate.toLocaleDateString('en-GB', {
   day: 'numeric', month: 'short', year: 'numeric'
 });
 
-document.getElementById('conf-order-id').textContent     = `#${orderId.slice(-6).toUpperCase()}`;
-document.getElementById('conf-delivery-date').textContent = formatted;
-document.getElementById('conf-phone').textContent         = phone || '-';
-document.getElementById('conf-address').textContent       = address || '-';
-document.getElementById('conf-total').textContent         = `${total} L.E`;
+document.getElementById('conf-order-id').textContent = `#${orderId.slice(-6).toUpperCase()}`;
+const deliveryEl = document.getElementById('conf-delivery-date');
+if (deliveryEl) deliveryEl.textContent = formatted;
+const phoneEl = document.getElementById('conf-phone');
+if (phoneEl) phoneEl.textContent = phone || '-';
+const addressEl = document.getElementById('conf-address');
+if (addressEl) addressEl.textContent = address || '-';
+const totalEl = document.getElementById('conf-total');
+if (totalEl) totalEl.textContent = `${total} L.E`;
 
 // Clear order from localStorage after showing
 localStorage.removeItem('lastOrderId');

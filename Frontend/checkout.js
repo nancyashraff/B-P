@@ -52,6 +52,8 @@ document.getElementById('send-otp-btn').addEventListener('click', async () => {
     btn.textContent = 'Resend OTP';
     btn.disabled    = false;
     showPopup('OTP sent! Check your email ✓', 'success');
+    // mark that OTP was sent so confirm requires it
+    localStorage.setItem('otpSent', '1');
   } else {
     showPopup(data.message, 'error');
     btn.textContent = 'Send OTP';
@@ -64,6 +66,12 @@ document.querySelector('.confirm-btn').addEventListener('click', async () => {
   const cart = getCart();
   if (cart.length === 0) {
     showPopup('Your cart is empty!', 'error');
+    return;
+  }
+
+  // Require that an OTP was requested before confirming
+  if (!localStorage.getItem('otpSent')) {
+    showPopup('Please request an OTP before confirming your order.', 'error');
     return;
   }
 
@@ -96,11 +104,17 @@ document.querySelector('.confirm-btn').addEventListener('click', async () => {
   const order = await res.json();
 
   if (res.ok) {
+    // Prefer canonical values from server response when available
     localStorage.setItem('lastOrderId',      order._id);
-    localStorage.setItem('lastOrderTotal',   order.total);
-    localStorage.setItem('lastOrderPhone',   phone);
-    localStorage.setItem('lastOrderAddress', governorate);
+    localStorage.setItem('lastOrderTotal',   order.total ?? total);
+    localStorage.setItem('lastOrderPhone',   order.phone || phone || '-');
+    // Compose a full address string from server response or from the form
+    const addrObj = order.address || { governorate, street, building, apartment };
+    const fullAddress = `${addrObj.governorate || ''}${addrObj.street ? ', ' + addrObj.street : ''}${addrObj.building ? ', ' + addrObj.building : ''}${addrObj.apartment ? ', ' + addrObj.apartment : ''}`.replace(/^,\s*/, '').trim();
+    localStorage.setItem('lastOrderAddress', fullAddress || '-');
     localStorage.removeItem('cart');
+    // clear OTP sent flag after successful order
+    localStorage.removeItem('otpSent');
     window.location.href = 'confirmation.html';
   } else {
     showPopup(order.message || 'Something went wrong', 'error');

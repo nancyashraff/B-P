@@ -140,7 +140,7 @@ nav .nav-right {
   font-weight: 700;
   margin-bottom: clamp(20px, 5vw, 32px);
   color: var(--black);
-  text-transform: lowercase;
+  text-transform: capitalize;
 }
 
 /* ── FILTERS ── */
