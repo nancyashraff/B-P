@@ -1,4 +1,4 @@
-const SHIPPING = 80;
+// Shipping removed — will be decided later
 
 function getCart() {
   return JSON.parse(localStorage.getItem('cart')) || [];
@@ -42,7 +42,10 @@ function loadCart() {
 
 function updateSummary(subtotal) {
   document.getElementById('subtotal').textContent = `${subtotal} L.E`;
-  document.getElementById('total').textContent    = `${subtotal + SHIPPING} L.E`;
+  // Show shipping as to-be-decided and use subtotal as total
+  const shippingEl = document.querySelector('.cart-summary .summary-row:nth-child(2) .summary-value');
+  if (shippingEl) shippingEl.textContent = 'To be decided / هيتم التحديد';
+  document.getElementById('total').textContent    = `${subtotal} L.E`;
 }
 
 function changeQty(index, change) {

@@ -45,7 +45,12 @@ function renderProduct(product) {
   productImage.innerHTML = `<img src="http://localhost:3000/uploads/${product.image}" alt="${product.name}" onerror="this.onerror=null; this.src='utils/${product.image}';" />`;
   productCategory.textContent = formatCategory(product.category);
   productName.textContent = product.name;
-  productTagline.textContent = product.scents && product.scents.length ? `Available scents: ${product.scents.join(', ')}` : 'A beautiful product from B&P.';
+  productTagline.textContent = product.scents && product.scents.length ? `Available scents: ${product.scents.join(', ')}` : ' ';
+
+  const backBtn = document.querySelector('.nav-back');
+  if (backBtn && product.category) {
+    backBtn.href = `${product.category}.html`;
+  }
 
   const displayPrice = product.finalPrice || product.price;
   productPrice.textContent = `${displayPrice} L.E`;

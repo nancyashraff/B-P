@@ -197,4 +197,19 @@ router.put('/products/:id/stock', adminAuth, async (req, res) => {
   }
 });
 
+router.delete('/reset-database', adminAuth, async (req, res) => {
+  try {
+    const OTP     = require('../models/OTP');
+    const Order   = require('../models/Order');
+
+    await Product.deleteMany({});
+    await Order.deleteMany({});
+    await OTP.deleteMany({});
+
+    res.json({ message: 'Database cleared successfully' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 module.exports = router;

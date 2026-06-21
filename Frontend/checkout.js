@@ -1,5 +1,4 @@
 const API = 'http://localhost:3000/api';
-let deliveryPrice = 80;
 
 function getCart() {
   return JSON.parse(localStorage.getItem('cart')) || [];
@@ -8,13 +7,12 @@ function getCart() {
 function loadSummary() {
   const cart     = getCart();
   const subtotal = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
-  const total    = subtotal + deliveryPrice;
 
   document.querySelector('.payment-summary .summary-row:nth-child(1) .summary-value').textContent = `${subtotal} L.E`;
-  document.querySelector('.summary-row:nth-child(2) .summary-value').textContent                  = `${deliveryPrice} L.E`;
-  document.querySelector('.summary-row.total .summary-value').textContent                         = `${total} L.E`;
+  document.querySelector('.summary-row:nth-child(2) .summary-value').textContent                  = 'To be decided / هيتم التحديد';
+  document.querySelector('.summary-row.total .summary-value').textContent                         = `${subtotal} L.E`;
 
-  return total;
+  return subtotal;
 }
 
 // ── CHECK CART ON PAGE LOAD ──

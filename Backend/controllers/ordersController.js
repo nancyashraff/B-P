@@ -10,7 +10,8 @@ const createOrder = async (req, res) => {
       return res.status(400).json({ message: 'Cart is empty' });
 
     const subtotal = cart.items.reduce((sum, i) => sum + i.product.price * i.quantity, 0);
-    const total = subtotal + 80; // 80 L.E shipping
+    // Shipping will be decided later; use subtotal as total
+    const total = subtotal;
 
     const order = await Order.create({
       userId,

@@ -15,7 +15,7 @@ const sendOTP = async (email, otp) => {
     subject: 'Your OTP - B&P Beauty Shop',
     html: `
       <div style="font-family: sans-serif; max-width: 400px; margin: 0 auto; padding: 32px; border: 1px solid #eee; border-radius: 12px;">
-        <h2 style="font-family: serif; color: #111;">B& Beauty Shop</h2>
+        <h2 style="font-family: serif; color: #111;">B&P Beauty Shop</h2>
         <p style="color: #555;">Your verification code is:</p>
         <h1 style="letter-spacing: 8px; color: #c8a96e; font-size: 36px;">${otp}</h1>
         <p style="color: #999; font-size: 12px;">This code expires in 10 minutes.</p>
@@ -90,15 +90,15 @@ const sendOrderNotification = async (order) => {
 
         <div style="margin-top: 24px; padding: 16px; background: #f9f9f9; border-radius: 8px;">
           <div style="display:flex; justify-content:space-between; margin-bottom: 8px;">
-            <span style="color:#888;">Subtotal</span>
-            <span>${order.total - 80} L.E</span>
+            <span style="color:#888;">Subtotal </span>
+            <span>${order.total} L.E</span>
           </div>
           <div style="display:flex; justify-content:space-between; margin-bottom: 8px;">
             <span style="color:#888;">Shipping</span>
-            <span>80 L.E</span>
+            <span>To be decided / هيتم التحديد</span>
           </div>
           <div style="display:flex; justify-content:space-between; font-size:18px; font-weight:bold; color:#c8a96e; border-top: 1px solid #eee; padding-top: 8px;">
-            <span>Total</span>
+            <span>Total </span>
             <span>${order.total} L.E</span>
           </div>
         </div>

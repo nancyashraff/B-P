@@ -18,7 +18,7 @@ html, body {
 }
 
 body {
-  background: #f5f3f2;
+  background: #fff;
   color: var(--dark);
   font-family: 'Cormorant Garamond', serif;
   width: 100%;
@@ -34,12 +34,12 @@ nav {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: #111;
+  background: #fff;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 14px clamp(12px, 5vw, 40px);
-  border-bottom: 1px solid rgba(0,0,0,0.3);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
   width: 100%;
 }
 
@@ -49,8 +49,8 @@ nav .nav-icon {
   cursor: pointer;
   opacity: 0.7;
   transition: opacity 0.2s;
-  color: #fff;
-  stroke: #fff;
+  color: var(--dark);
+  stroke: var(--dark);
 }
 
 nav .nav-back,
@@ -320,7 +320,7 @@ footer {
   color: rgba(255,255,255,0.6);
   text-align: center;
   padding: clamp(18px, 6vw, 32px) clamp(12px, 5vw, 40px);
-  font-family: 'Josefin Sans', sans-serif;
+  font-family: inherit;
   font-size: clamp(9px, 2vw, 13px);
   letter-spacing: 0.15em;
   width: 100%;
@@ -328,9 +328,8 @@ footer {
 }
 
 footer .footer-logo {
-  font-family: 'Playfair Display', serif;
   font-size: clamp(16px, 5vw, 24px);
-  color: var(--gold-light);
+  color: #fff;
   margin-bottom: clamp(6px, 2vw, 12px);
 }
 
@@ -386,7 +385,7 @@ footer .footer-copy {
   gap: 8px;
   color: rgba(255,255,255,0.7);
   text-decoration: none;
-  font-family: 'Josefin Sans', sans-serif;
+  font-family: inherit;
   font-size: clamp(11px, 2vw, 13px);
   letter-spacing: 0.1em;
   margin-top: clamp(8px, 2vw, 12px);

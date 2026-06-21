@@ -1,11 +1,13 @@
 :root {
   color-scheme: light;
+  --gold: #c8a96e;
+  --gold-light: #e2c99a;
 }
 
 body {
   margin: 0;
   font-family: 'Josefin Sans', sans-serif;
-  background: #faf6f1;
+  background: linear-gradient(135deg, #fef9f0 0%, #fffdf8 50%, #fef9f0 100%);
   color: #2b2b2b;
 }
 
@@ -133,7 +135,7 @@ h1 {
 .product-price {
   font-size: 2rem;
   font-weight: 700;
-  color: #2b2b2b;
+  color: var(--gold);
 }
 
 .product-discount {
@@ -168,10 +170,23 @@ h1 {
 }
 
 .select-field {
-  min-width: 220px;
-  padding: 12px 14px;
-  background: #fff;
+  padding: 14px 18px;
+  background: #fcf5ec;
   color: #2b2b2b;
+  border-radius: 14px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+  min-width: 220px;
+}
+
+.select-field:hover,
+.select-field:focus {
+  outline: none;
+  border-color: #c8a96e;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
 .quantity-group {
