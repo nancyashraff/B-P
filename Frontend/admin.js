@@ -1,4 +1,4 @@
-const API = 'http://localhost:3000/api/admin';
+const API = 'https://b-p-kappa.vercel.app/api/admin';
 let adminPassword = '';
 
 // ── LOGIN ──
