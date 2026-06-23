@@ -2,9 +2,8 @@ const express = require('express');
 const router  = express.Router();
 const Order   = require('../models/Order');
 const Product = require('../models/Product');
-const upload = require('../utils/upload');
-const fs = require('fs');
-const path = require('path');
+const upload  = require('../utils/upload');
+const path    = require('path');
 
 const adminAuth = (req, res, next) => {
   const password = req.headers['admin-password'];
@@ -25,20 +24,12 @@ router.post('/upload', adminAuth, (req, res) => {
     }
     console.log('File uploaded:', req.file.filename);
 
-    // Also copy uploaded file into Frontend/utils for backwards compatibility
-    try {
-      const backendFile = path.join(__dirname, '../uploads', req.file.filename);
-      const frontendUtilsDir = path.join(__dirname, '../../Frontend/utils');
-      if (!fs.existsSync(frontendUtilsDir)) fs.mkdirSync(frontendUtilsDir, { recursive: true });
-      const frontendFile = path.join(frontendUtilsDir, req.file.filename);
-      fs.copyFileSync(backendFile, frontendFile);
-    } catch (copyErr) {
-      console.warn('Could not copy uploaded file to Frontend/utils:', copyErr.message);
-    }
-
+    // Note: Local fs copies are skipped here because Vercel environments use cloud storage 
+    // and a read-only root system. Ensure frontend fetches images via your dynamic /uploads static route.
     res.json({ filename: req.file.filename });
   });
 });
+
 // ── STATS ──
 router.get('/stats', adminAuth, async (req, res) => {
   try {
@@ -106,34 +97,27 @@ router.get('/orders', adminAuth, async (req, res) => {
   }
 });
 
+// ── CHANGE PASSWORD (Vercel Friendly) ──
 router.put('/password', adminAuth, async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
+
     if (!currentPassword || !newPassword) {
       return res.status(400).json({ message: 'Current and new passwords are required.' });
     }
+
     if (currentPassword !== process.env.ADMIN_PASSWORD) {
       return res.status(401).json({ message: 'Current password is incorrect.' });
     }
 
-    const envPath = path.join(__dirname, '../.env');
-    let envContent = '';
-    if (fs.existsSync(envPath)) {
-      envContent = fs.readFileSync(envPath, 'utf8');
+    if (newPassword.length < 4) {
+      return res.status(400).json({ message: 'New password must be at least 4 characters long.' });
     }
 
-    const escapedPassword = newPassword.replace(/\\/g, '\\\\');
-    if (/^ADMIN_PASSWORD=.*$/m.test(envContent)) {
-      envContent = envContent.replace(/^ADMIN_PASSWORD=.*$/m, `ADMIN_PASSWORD=${escapedPassword}`);
-    } else {
-      if (envContent && !envContent.endsWith('\n')) envContent += '\n';
-      envContent += `ADMIN_PASSWORD=${escapedPassword}\n`;
-    }
-
-    fs.writeFileSync(envPath, envContent, 'utf8');
+    // Update active memory reference for the session lifecycle
     process.env.ADMIN_PASSWORD = newPassword;
 
-    res.json({ message: 'Password updated successfully.' });
+    res.json({ message: 'Password updated successfully!' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -167,7 +151,7 @@ router.put('/products/:id', adminAuth, async (req, res) => {
     if (!product) return res.status(404).json({ message: 'Product not found' });
 
     Object.assign(product, req.body);
-    await product.save(); // triggers pre-save to recalculate finalPrice
+    await product.save();
 
     res.json(product);
   } catch (err) {
@@ -197,6 +181,7 @@ router.put('/products/:id/stock', adminAuth, async (req, res) => {
   }
 });
 
+// ── RESET DATABASE ──
 router.delete('/reset-database', adminAuth, async (req, res) => {
   try {
     const OTP     = require('../models/OTP');
@@ -207,30 +192,6 @@ router.delete('/reset-database', adminAuth, async (req, res) => {
     await OTP.deleteMany({});
 
     res.json({ message: 'Database cleared successfully' });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-router.put('/password', async (req, res) => {
-  try {
-    const { currentPassword, newPassword } = req.body;
-    const adminAuth = req.headers['admin-password'];
-
-    // 1. Check if the current session password sent in headers is valid
-    // (While you build the MongoDB Admin model, we check against the .env safety backup)
-    if (adminAuth !== process.env.ADMIN_PASSWORD || currentPassword !== process.env.ADMIN_PASSWORD) {
-      return res.status(401).json({ message: 'Incorrect current password' });
-    }
-
-    if (!newPassword || newPassword.length < 4) {
-      return res.status(400).json({ message: 'New password must be at least 4 characters long' });
-    }
-
-    // 2. SUCCESS! 
-    // Note: Since Vercel env variables are read-only at runtime, this updates your local session status.
-    // To make this fully permanent across server reboots, we will wire it into a MongoDB collection next.
-    res.json({ message: 'Password updated successfully!' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
