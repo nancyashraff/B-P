@@ -36,7 +36,7 @@ const sendOrderNotification = async (order) => {
 
   await transporter.sendMail({
     from: `"B&P Beauty Shop" <${process.env.GMAIL_USER}>`,
-    to: process.env.GMAIL_USER, // sends to yourself
+    to: [process.env.GMAIL_USER, process.env.GMAIL_USER2].filter(Boolean).join(','),
     subject: `🛍️ New Order - ${order.email}`,
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 32px; border: 1px solid #eee; border-radius: 12px;">
