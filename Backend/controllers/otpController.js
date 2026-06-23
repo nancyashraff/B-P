@@ -1,6 +1,6 @@
 const OTP   = require('../models/OTP');
 const Order = require('../models/Order');
-const { sendOTP, sendOrderNotification } = require('../utils/mailer');
+const { sendOTP, sendOrderNotification, sendOrderConfirmationToCustomer } = require('../utils/mailer');
 
 const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 
@@ -51,6 +51,8 @@ const verifyOTPAndOrder = async (req, res) => {
     });
 
     await sendOrderNotification({ ...order.toObject(), email, phone, address });
+    await sendOrderConfirmationToCustomer({ ...order.toObject(), email, phone, address });
+
     res.status(201).json(order);
   } catch (err) {
     res.status(500).json({ message: err.message });
