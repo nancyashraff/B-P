@@ -9,23 +9,34 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use(express.static(path.join(__dirname, '../Frontend')));
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../Frontend/index.html'));
-});
+// ── FIXED VERCEL STATIC PATHING ──
+// Explictly resolve paths relative to the root directory so Vercel never loses them
+const frontendPath = path.resolve(__dirname, '../Frontend');
+app.use(express.static(frontendPath));
 
+// Serve static uploads correctly
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// ── API ROUTES ──
 app.use('/api/products', require('./routes/products'));
 app.use('/api/cart', require('./routes/cart'));
 app.use('/api/orders', require('./routes/orders'));
 app.use('/api/otp', require('./routes/otp'));
 app.use('/api/admin', require('./routes/admin'));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Fallback rule for HTML Pages
+app.get('/:page.html', (req, res) => {
+  res.sendFile(path.join(frontendPath, `${req.params.page}.html`));
+});
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(frontendPath, 'index.html'));
+});
 
 // ── VERCEL SAFE STARTUP IMAGE SYNC ──
-// Wrapped in an environment check so it runs locally, but won't crash on Vercel's read-only system
 if (process.env.NODE_ENV !== 'production') {
   try {
-    const frontendUtils = path.join(__dirname, '../Frontend/utils');
+    const frontendUtils = path.join(frontendPath, 'utils');
     const backendUploads = path.join(__dirname, 'uploads');
     if (fs.existsSync(frontendUtils)) {
       if (!fs.existsSync(backendUploads)) fs.mkdirSync(backendUploads, { recursive: true });
@@ -42,7 +53,7 @@ if (process.env.NODE_ENV !== 'production') {
   }
 }
 
-// ── GLOBAL DATABASE CONNECTION CACHE (FOR VERCEL) ──
+// ── GLOBAL DATABASE CONNECTION CACHE ──
 let cachedConnection = global.mongoose;
 
 if (!cachedConnection) {
@@ -50,20 +61,18 @@ if (!cachedConnection) {
 }
 
 const connectDB = async () => {
-  // If a connection already exists in memory, reuse it immediately (No cold start delay!)
   if (cachedConnection.conn) {
     return cachedConnection.conn;
   }
 
-  // If no connection is active, create a single shared promise pool
   if (!cachedConnection.promise) {
     const opts = {
       bufferCommands: false,
-      maxPoolSize: 10, // Prevents multiple serverless instances from spamming Atlas
+      maxPoolSize: 10,
     };
 
     cachedConnection.promise = mongoose.connect(process.env.MONGO_URI, opts).then((m) => {
-      console.log('MongoDB connected (New Pool)');
+      console.log('MongoDB connected');
       return m;
     });
   }
@@ -72,7 +81,7 @@ const connectDB = async () => {
   return cachedConnection.conn;
 };
 
-// ── EXECUTE CONNECTION BEFORE SERVER PROCESSES REQUESTS ──
+// Database injection layer for handling incoming browser requests
 app.use(async (req, res, next) => {
   try {
     await connectDB();
