@@ -35,12 +35,7 @@ try {
 }
 
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log('MongoDB connected');
-    app.listen(process.env.PORT, () => {
-      console.log(`Server running on http://localhost:${process.env.PORT}`);
-    });
-  })
+  .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('Connection failed:', err));
 
-  module.exports = app;
+module.exports = app;
