@@ -32,48 +32,59 @@ function logout() {
 
 async function promptChangePassword() {
   const bodyHtml = `
-    <div class="modal-field">
-      <label for="admin-cur-pass">Current password</label>
-      <input id="admin-cur-pass" type="password" autocomplete="current-password" />
+    <div class="modal-field" style="margin-bottom: 15px; display: flex; flex-direction: column;">
+      <label for="admin-cur-pass" style="font-weight: 600; margin-bottom: 5px;">Current password</label>
+      <input id="admin-cur-pass" type="password" autocomplete="current-password" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
     </div>
-    <div class="modal-field">
-      <label for="admin-new-pass">New password</label>
-      <input id="admin-new-pass" type="password" autocomplete="new-password" />
+    <div class="modal-field" style="margin-bottom: 15px; display: flex; flex-direction: column;">
+      <label for="admin-new-pass" style="font-weight: 600; margin-bottom: 5px;">New password</label>
+      <input id="admin-new-pass" type="password" autocomplete="new-password" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
     </div>
-  `; // Matches your existing modal HTML layout
+    <div class="modal-field" style="display: flex; flex-direction: column;">
+      <label for="admin-confirm-pass" style="font-weight: 600; margin-bottom: 5px;">Confirm password</label>
+      <input id="admin-confirm-pass" type="password" autocomplete="new-password" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+    </div>
+  `;
 
-  openAdminModal('Change Admin Password', bodyHtml); // Opens your modal
+  openAdminModal({
+    title: 'Change Admin Password',
+    bodyHtml,
+    confirmText: 'Save',
+    onConfirm: async () => {
+      const current = document.getElementById('admin-cur-pass').value.trim();
+      const next    = document.getElementById('admin-new-pass').value.trim();
+      const confirm = document.getElementById('admin-confirm-pass').value.trim();
 
-  // Update the confirm button click action dynamically
-  const confirmBtn = document.getElementById('admin-modal-confirm'); //
-  confirmBtn.onclick = async () => {
-    const currentPassword = document.getElementById('admin-cur-pass').value;
-    const newPassword = document.getElementById('admin-new-pass').value;
+      if (!current || !next || !confirm) {
+        showAdminMessage('Please complete all fields.', 'error');
+        return false;
+      }
+      if (next !== confirm) {
+        showAdminMessage('Passwords do not match.', 'error');
+        return false;
+      }
 
-    if (!currentPassword || !newPassword) {
-      alert('Please fill out both fields.');
-      return;
+      const res = await fetch(`${API}/password`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'admin-password': adminPassword
+        },
+        body: JSON.stringify({ currentPassword: current, newPassword: next })
+      });
+
+      if (res.ok) {
+        adminPassword = next;
+        sessionStorage.setItem('adminPassword', next);
+        showAdminMessage('Password changed successfully.', 'success');
+        return true;
+      }
+
+      const data = await res.json().catch(() => ({}));
+      showAdminMessage(data.message || 'Unable to change password.', 'error');
+      return false;
     }
-
-    // Call your backend route to update the password
-    const res = await fetch(`${API}/change-password`, { //
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'admin-password': adminPassword // Passes current session password
-      },
-      body: JSON.stringify({ currentPassword, newPassword })
-    });
-
-    if (res.ok) {
-      alert('Password changed successfully! Logging out...');
-      closeAdminModal(); //
-      logout(); // Forces you to log back in with the new password
-    } else {
-      const err = await res.json().catch(() => ({}));
-      alert(err.message || 'Failed to change password.');
-    }
-  };
+  });
 }
 
 let adminToastTimeout = null;
