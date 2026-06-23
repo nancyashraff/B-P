@@ -240,7 +240,7 @@ async function loadOrders() {
     const created  = new Date(o.createdAt).toLocaleString('en-GB');
     const itemsHtml = (Array.isArray(o.items) ? o.items : []).map(item => `
       <div class="order-item">
-        <img src="http://localhost:3000/uploads/${item.image}" alt="${item.name}" class="order-item-image" onerror="this.src='https://via.placeholder.com/60'" />
+        <img src="https://b-p-kappa.vercel.app/uploads/${item.image}" alt="${item.name}" class="order-item-image" onerror="this.src='https://via.placeholder.com/60'" />
         <div class="order-item-meta">
           <div class="order-item-name">${item.name || 'Unnamed product'}</div>
           <div class="order-item-detail">${item.category || 'Product'} · ${item.scent || 'No scent'} · ${item.quantity} × ${item.price} L.E</div>
@@ -305,7 +305,7 @@ async function loadProducts() {
   tbody.innerHTML = products.map(p => `
     <tr>
       <td>
-        <img src="http://localhost:3000/uploads/${p.image}" 
+        <img src="https://b-p-kappa.vercel.app/uploads/${p.image}" 
              style="width:50px; height:50px; object-fit:cover; border-radius:4px;" 
              onerror="this.src='https://via.placeholder.com/50'">
       </td>
@@ -429,7 +429,7 @@ async function saveProduct() {
 }
 
 async function editProduct(id) {
-  const res     = await fetch(`http://localhost:3000/api/products/${id}`);
+  const res     = await fetch(`https://b-p-kappa.vercel.app/api/products/${id}`);
   const product = await res.json();
 
   document.getElementById('edit-product-id').value  = product._id;
@@ -448,7 +448,7 @@ async function editProduct(id) {
   // Change this line in editProduct
 if (product.image) {
   // Use the full API URL to ensure the browser finds the image
-  const imageUrl = `http://localhost:3000/uploads/${product.image}`; 
+  const imageUrl = `https://b-p-kappa.vercel.app/uploads/${product.image}`; 
   document.getElementById('image-preview').innerHTML =
     `<img src="${imageUrl}" style="width:100%;height:100%;object-fit:cover;" />`;
 }
@@ -502,5 +502,3 @@ function clearForm() {
   document.getElementById('p-scents').value             = '';
   document.getElementById('cancel-edit-btn').style.display = 'none';
 }
-
-//http://127.0.0.1:5500/Frontend/admin.html

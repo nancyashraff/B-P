@@ -1,4 +1,4 @@
-const API = 'http://localhost:3000/api';
+const API = 'https://b-p-kappa.vercel.app/api';
 
 async function loadPerfumes(size = 'all', gender = 'all') {
   let url = `${API}/products?category=perfumes`;
@@ -12,7 +12,7 @@ async function loadPerfumes(size = 'all', gender = 'all') {
   grid.innerHTML = products.map(p => `
     <div class="perfume-card" data-size="${p.size}" data-gender="${p.gender}" onclick="window.location.href='product.html?id=${p._id}'" style="cursor:pointer;">
       <div class="perfume-image">
-          <img src="http://localhost:3000/uploads/${p.image}" alt="${p.name}" onerror="this.onerror=null; this.src='utils/${p.image}';" />
+          <img src="https://b-p-kappa.vercel.app/uploads/${p.image}" alt="${p.name}" onerror="this.onerror=null; this.src='utils/${p.image}';" />
         </div>
       <div class="perfume-info">
         <h3 class="perfume-name">${p.name}</h3>

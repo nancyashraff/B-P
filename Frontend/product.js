@@ -1,4 +1,4 @@
-const API = 'http://localhost:3000/api';
+const API = 'https://b-p-kappa.vercel.app/api';
 
 const params = new URLSearchParams(window.location.search);
 const productId = params.get('id');
@@ -42,7 +42,7 @@ async function loadProduct() {
 }
 
 function renderProduct(product) {
-  productImage.innerHTML = `<img src="http://localhost:3000/uploads/${product.image}" alt="${product.name}" onerror="this.onerror=null; this.src='utils/${product.image}';" />`;
+  productImage.innerHTML = `<img src="https://b-p-kappa.vercel.app/uploads/${product.image}" alt="${product.name}" onerror="this.onerror=null; this.src='utils/${product.image}';" />`;
   productCategory.textContent = formatCategory(product.category);
   productName.textContent = product.name;
   productTagline.textContent = product.scents && product.scents.length ? `Available scents: ${product.scents.join(', ')}` : ' ';

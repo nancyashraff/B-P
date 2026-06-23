@@ -1,4 +1,4 @@
-const API = 'http://localhost:3000/api';
+const API = 'https://b-p-kappa.vercel.app/api';
 
 async function loadOils(volume = 'all', purpose = 'all') {
   let url = `${API}/products?category=naturaloils`;
@@ -11,7 +11,7 @@ async function loadOils(volume = 'all', purpose = 'all') {
   const container = document.querySelector('.oils-container');
   container.innerHTML = products.map(p => `
     <div class="oil-card" onclick="window.location.href='product.html?id=${p._id}'" style="cursor:pointer;">
-      <img src="http://localhost:3000/uploads/${p.image}" alt="${p.name}" class="oil-image" onerror="this.onerror=null; this.src='utils/${p.image}';">
+      <img src="https://b-p-kappa.vercel.app/uploads/${p.image}" alt="${p.name}" class="oil-image" onerror="this.onerror=null; this.src='utils/${p.image}';">
       <div class="oil-content">
         <h3>${p.name}</h3>
         <div class="oil-details">

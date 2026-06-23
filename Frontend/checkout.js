@@ -1,4 +1,4 @@
-const API = 'http://localhost:3000/api';
+const API = 'https://b-p-kappa.vercel.app/api';
 
 function getCart() {
   return JSON.parse(localStorage.getItem('cart')) || [];

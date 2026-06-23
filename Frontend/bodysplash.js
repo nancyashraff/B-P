@@ -1,4 +1,4 @@
-const API = 'http://localhost:3000/api';
+const API = 'https://b-p-kappa.vercel.app/api';
 
 async function loadBodySplash() {
   const res = await fetch(`${API}/products?category=bodysplash`);
@@ -7,7 +7,7 @@ async function loadBodySplash() {
   const container = document.querySelector('.splash-container');
   container.innerHTML = products.map(p => `
     <div class="splash-card" onclick="window.location.href='product.html?id=${p._id}'" style="cursor:pointer;">
-      <img src="http://localhost:3000/uploads/${p.image}" alt="${p.name}" class="splash-image" onerror="this.onerror=null; this.src='utils/${p.image}';">
+      <img src="https://b-p-kappa.vercel.app/uploads/${p.image}" alt="${p.name}" class="splash-image" onerror="this.onerror=null; this.src='utils/${p.image}';">
       <div class="splash-content">
         <h3>${p.name}</h3>
         <div class="splash-details">

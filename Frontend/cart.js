@@ -1,5 +1,3 @@
-// Shipping removed — will be decided later
-
 function getCart() {
   return JSON.parse(localStorage.getItem('cart')) || [];
 }
@@ -20,7 +18,7 @@ function loadCart() {
   container.innerHTML = cart.map((item, index) => `
     <div class="cart-item" data-index="${index}">
       <div class="item-image">
-        <img src="http://localhost:3000/uploads/${item.image}" alt="${item.name}" onerror="this.onerror=null; this.src='utils/${item.image}';" />
+        <img src="https://b-p-kappa.vercel.app/uploads/${item.image}" alt="${item.name}" onerror="this.onerror=null; this.src='utils/${item.image}';" />
       </div>
       <div class="item-details">
         <h3 class="item-name">${item.name}</h3>
@@ -42,7 +40,7 @@ function loadCart() {
 
 function updateSummary(subtotal) {
   document.getElementById('subtotal').textContent = `${subtotal} L.E`;
-  // Show shipping as to-be-decided and use subtotal as total
+ 
   const shippingEl = document.querySelector('.cart-summary .summary-row:nth-child(2) .summary-value');
   if (shippingEl) shippingEl.textContent = 'To be decided / هيتم التحديد';
   document.getElementById('total').textContent    = `${subtotal} L.E`;

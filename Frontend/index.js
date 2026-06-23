@@ -1,4 +1,4 @@
-const API = 'http://localhost:3000/api';
+const API = 'https://b-p-kappa.vercel.app/api';
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchResults = document.getElementById('search-results');
   const searchClear   = document.getElementById('search-clear');
 
-  if (!searchInput) return; // safety check
+  if (!searchInput) return;
 
   let searchTimeout;
 
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       searchResults.innerHTML = products.map(p => `
         <a href="product.html?id=${p._id}" class="search-result-item">
-          <img src="http://localhost:3000/uploads/${p.image}" alt="${p.name}" class="search-result-img"
+          <img src="https://b-p-kappa.vercel.app/uploads/${p.image}" alt="${p.name}" class="search-result-img"
             onerror="this.onerror=null; this.src='utils/${p.image}';" />
           <div class="search-result-info">
             <div class="search-result-name">${highlightMatch(p.name, query)}</div>
