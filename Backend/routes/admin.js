@@ -4,13 +4,23 @@ const Order   = require('../models/Order');
 const Product = require('../models/Product');
 const upload  = require('../utils/upload');
 const path    = require('path');
+const Admin = require('../models/Admin');
 
-const adminAuth = (req, res, next) => {
+const adminAuth = async (req, res, next) => {
   const password = req.headers['admin-password'];
-  if (password !== process.env.ADMIN_PASSWORD) {
-    return res.status(401).json({ message: 'Unauthorized' });
+  
+  try {
+    // Look for a changed password in the database
+    const adminRecord = await Admin.findOne();
+    const correctPassword = adminRecord ? adminRecord.password : process.env.ADMIN_PASSWORD;
+
+    if (password !== correctPassword) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+    next();
+  } catch (err) {
+    return res.status(500).json({ message: 'Database auth error' });
   }
-  next();
 };
 
 router.post('/upload', adminAuth, (req, res) => {
@@ -97,7 +107,6 @@ router.get('/orders', adminAuth, async (req, res) => {
   }
 });
 
-// ── CHANGE PASSWORD (Vercel Friendly) ──
 router.put('/password', adminAuth, async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
@@ -106,7 +115,10 @@ router.put('/password', adminAuth, async (req, res) => {
       return res.status(400).json({ message: 'Current and new passwords are required.' });
     }
 
-    if (currentPassword !== process.env.ADMIN_PASSWORD) {
+    const adminRecord = await Admin.findOne();
+    const correctPassword = adminRecord ? adminRecord.password : process.env.ADMIN_PASSWORD;
+
+    if (currentPassword !== correctPassword) {
       return res.status(401).json({ message: 'Current password is incorrect.' });
     }
 
@@ -114,10 +126,15 @@ router.put('/password', adminAuth, async (req, res) => {
       return res.status(400).json({ message: 'New password must be at least 4 characters long.' });
     }
 
-    // Update active memory reference for the session lifecycle
-    process.env.ADMIN_PASSWORD = newPassword;
+    // Save the new password securely in your database collection
+    if (adminRecord) {
+      adminRecord.password = newPassword;
+      await adminRecord.save();
+    } else {
+      await Admin.create({ password: newPassword });
+    }
 
-    res.json({ message: 'Password updated successfully!' });
+    res.json({ message: 'Password updated successfully across all servers!' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
