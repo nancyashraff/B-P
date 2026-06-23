@@ -52,22 +52,32 @@ router.get('/stats', adminAuth, async (req, res) => {
   }
 });
 
-// ── SALES BY CATEGORY ──
 router.get('/by-category', adminAuth, async (req, res) => {
   try {
     const orders = await Order.find();
     const categoryStats = {};
+
     orders.forEach(order => {
+      // Safety check: skip if order doesn't have an items array
+      if (!order.items || !Array.isArray(order.items)) return;
+
       order.items.forEach(item => {
-        const category = item.category || 'unknown';
+        // Fallback to 'Uncategorized' if item has no category name
+        const category = item.category || 'Uncategorized';
+        
         if (!categoryStats[category]) {
           categoryStats[category] = { revenue: 0, quantity: 0, orders: 0 };
         }
-        categoryStats[category].revenue  += (item.price || 0) * item.quantity;
-        categoryStats[category].quantity += item.quantity;
+
+        const price = Number(item.price) || 0;
+        const qty = Number(item.quantity) || 0;
+
+        categoryStats[category].revenue  += price * qty;
+        categoryStats[category].quantity += qty;
         categoryStats[category].orders   += 1;
       });
     });
+
     res.json(categoryStats);
   } catch (err) {
     res.status(500).json({ message: err.message });
