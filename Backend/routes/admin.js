@@ -6,32 +6,21 @@ const upload  = require('../utils/upload');
 const path    = require('path');
 const Admin = require('../models/Admin');
 
-// const adminAuth = async (req, res, next) => {
-//   const password = req.headers['admin-password'];
-  
-//   try {
-//     // Look for a changed password in the database
-//     const adminRecord = await Admin.findOne();
-//     const correctPassword = adminRecord ? adminRecord.password : process.env.ADMIN_PASSWORD;
-
-//     if (password !== correctPassword) {
-//       return res.status(401).json({ message: 'Unauthorized' });
-//     }
-//     next();
-//   } catch (err) {
-//     return res.status(500).json({ message: 'Database auth error' });
-//   }
-// };
-
-const adminAuth = (req, res, next) => {
+const adminAuth = async (req, res, next) => {
   const password = req.headers['admin-password'];
   
-  // TEMPORARY: Hardcode '1234' so you can log in right now
-  if (password === '1234' || password === process.env.ADMIN_PASSWORD) {
-    return next();
+  try {
+    // Look for a changed password in the database
+    const adminRecord = await Admin.findOne();
+    const correctPassword = adminRecord ? adminRecord.password : process.env.ADMIN_PASSWORD;
+
+    if (password !== correctPassword) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+    next();
+  } catch (err) {
+    return res.status(500).json({ message: 'Database auth error' });
   }
-  
-  return res.status(401).json({ message: 'Unauthorized' });
 };
 
 router.post('/upload', adminAuth, (req, res) => {
