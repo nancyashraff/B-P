@@ -4,26 +4,25 @@ const Order   = require('../models/Order');
 const Product = require('../models/Product');
 const upload  = require('../utils/upload');
 const path    = require('path');
-const Admin = require('../models/Admin');
+const Admin   = require('../models/Admin');
 
+// ── PURE DATABASE AUTH MIDDLEWARE ──
 const adminAuth = async (req, res, next) => {
   const password = req.headers['admin-password'];
   
   try {
-    // 1. Look for a changed password inside your MongoDB database
+    // 1. Fetch the password document from MongoDB
     const adminRecord = await Admin.findOne();
     
-    // 2. If it exists, check against it. If your database is empty, use your Vercel .env backup password!
+    // 2. Fallback to .env backup only if the database collection is completely empty
     const correctPassword = adminRecord ? adminRecord.password : process.env.ADMIN_PASSWORD;
 
-    // 3. Emergency backup: also allow '1234' just in case you get locked out during setup
-    if (password === correctPassword || password === '1234') {
-      return next();
+    if (password !== correctPassword) {
+      return res.status(401).json({ message: 'Unauthorized' });
     }
-    
-    return res.status(401).json({ message: 'Unauthorized' });
+    next();
   } catch (err) {
-    return res.status(500).json({ message: 'Database auth error' });
+    return res.status(500).json({ message: 'Database authentication error' });
   }
 };
 
@@ -36,10 +35,6 @@ router.post('/upload', adminAuth, (req, res) => {
     if (!req.file) {
       return res.status(400).json({ message: 'No file uploaded' });
     }
-    console.log('File uploaded:', req.file.filename);
-
-    // Note: Local fs copies are skipped here because Vercel environments use cloud storage 
-    // and a read-only root system. Ensure frontend fetches images via your dynamic /uploads static route.
     res.json({ filename: req.file.filename });
   });
 });
@@ -111,6 +106,7 @@ router.get('/orders', adminAuth, async (req, res) => {
   }
 });
 
+// ── TARGETED PASSWORD REWRITE ──
 router.put('/password', adminAuth, async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
@@ -122,7 +118,7 @@ router.put('/password', adminAuth, async (req, res) => {
     const adminRecord = await Admin.findOne();
     const correctPassword = adminRecord ? adminRecord.password : process.env.ADMIN_PASSWORD;
 
-    if (currentPassword !== correctPassword && currentPassword !== '1234') {
+    if (currentPassword !== correctPassword) {
       return res.status(401).json({ message: 'Current password is incorrect.' });
     }
 
@@ -130,7 +126,7 @@ router.put('/password', adminAuth, async (req, res) => {
       return res.status(400).json({ message: 'New password must be at least 4 characters long.' });
     }
 
-    // 4. Update the record in MongoDB if it exists, or create it if this is the first change!
+    // Update or initialize password document inside MongoDB exclusively
     if (adminRecord) {
       adminRecord.password = newPassword;
       await adminRecord.save();
@@ -138,7 +134,7 @@ router.put('/password', adminAuth, async (req, res) => {
       await Admin.create({ password: newPassword });
     }
 
-    res.json({ message: 'Password updated successfully across all servers!' });
+    res.json({ message: 'Password updated successfully!' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -206,8 +202,6 @@ router.put('/products/:id/stock', adminAuth, async (req, res) => {
 router.delete('/reset-database', adminAuth, async (req, res) => {
   try {
     const OTP     = require('../models/OTP');
-    const Order   = require('../models/Order');
-
     await Product.deleteMany({});
     await Order.deleteMany({});
     await OTP.deleteMany({});
