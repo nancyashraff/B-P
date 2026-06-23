@@ -212,4 +212,37 @@ router.delete('/reset-database', adminAuth, async (req, res) => {
   }
 });
 
+router.put('/change-password', async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    const adminAuth = req.headers['admin-password'];
+
+    // 1. Verify the requester is authenticated
+    const adminRecord = await Admin.findOne();
+    
+    // Fallback to .env password if database is not initialized yet
+    const validPassword = adminRecord ? adminRecord.password : process.env.ADMIN_PASSWORD;
+
+    if (adminAuth !== validPassword || currentPassword !== validPassword) {
+      return res.status(401).json({ message: 'Incorrect current password' });
+    }
+
+    if (!newPassword || newPassword.length < 4) {
+      return res.status(400).json({ message: 'New password must be at least 4 characters long' });
+    }
+
+    // 2. Save new password to database
+    if (adminRecord) {
+      adminRecord.password = newPassword;
+      await adminRecord.save();
+    } else {
+      await Admin.create({ password: newPassword });
+    }
+
+    res.json({ message: 'Password updated successfully!' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 module.exports = router;
