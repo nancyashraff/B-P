@@ -36,7 +36,7 @@ const sendOrderNotification = async (order) => {
 
   await transporter.sendMail({
     from: `"B&P Beauty Shop" <${process.env.GMAIL_USER}>`,
-    to: [process.env.GMAIL_USER, process.env.GMAIL_USER2].filter(Boolean).join(','),
+    to:   [process.env.GMAIL_USER, process.env.GMAIL_USER2].filter(Boolean).join(','),
     subject: `🛍️ New Order - ${order.email}`,
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 32px; border: 1px solid #eee; border-radius: 12px;">
@@ -88,20 +88,20 @@ const sendOrderNotification = async (order) => {
           </tbody>
         </table>
 
-        <div style="margin-top: 24px; padding: 16px; background: #f9f9f9; border-radius: 8px;">
-          <div style="display:flex; justify-content:space-between; margin-bottom: 8px;">
-            <span style="color:#888;">Subtotal </span>
-            <span>${order.total} L.E</span>
-          </div>
-          <div style="display:flex; justify-content:space-between; margin-bottom: 8px;">
-            <span style="color:#888;">Shipping</span>
-            <span>To be decided / هيتم التحديد</span>
-          </div>
-          <div style="display:flex; justify-content:space-between; font-size:18px; font-weight:bold; color:#c8a96e; border-top: 1px solid #eee; padding-top: 8px;">
-            <span>Total </span>
-            <span>${order.total} L.E</span>
-          </div>
-        </div>
+        <table style="width:100%; border-top: 1px solid #eee; margin-top: 16px;">
+          <tr>
+            <td style="color:#888; padding: 6px 0;">Subtotal</td>
+            <td style="text-align:right; padding: 6px 0;">${order.total} L.E</td>
+          </tr>
+          <tr>
+            <td style="color:#888; padding: 6px 0;">Shipping</td>
+            <td style="text-align:right; padding: 6px 0;">To be decided / هيتم التحديد</td>
+          </tr>
+          <tr>
+            <td style="font-size:18px; font-weight:bold; color:#c8a96e; padding: 10px 0;">Total</td>
+            <td style="font-size:18px; font-weight:bold; color:#c8a96e; text-align:right; padding: 10px 0;">${order.total} L.E</td>
+          </tr>
+        </table>
 
         <p style="margin-top: 24px; color: #999; font-size: 12px;">
           Order ID: ${order._id} · ${new Date().toLocaleString()}
